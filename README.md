@@ -35,5 +35,5 @@ Esta aplicación permite descargar videos de YouTube, convertirlos a MP3 y calcu
 
 Para aquellos que no desean instalar Python y las dependencias, proporcionamos un archivo ejecutable.
 
-1. Descarga el archivo ejecutable desde [enlace de descarga].
+1. Descarga el archivo ejecutable desde (https://github.com/Juanan242/YouTubeDownloaderBPM-Binaries).
 2. Ejecuta el archivo descargado para usar la aplicación.
