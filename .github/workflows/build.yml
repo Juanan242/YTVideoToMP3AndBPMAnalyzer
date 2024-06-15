@@ -23,7 +23,7 @@ jobs:
       run: chmod +x build.sh
 
     - name: Execute build.sh script
-      run: YouTubeDownloaderBPM/build.sh 
+      run: ./build.sh 
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v2
