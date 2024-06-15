@@ -1,4 +1,4 @@
-cd /Escritorio/YouTubeDownloaderBPM
+cd Escritorio/YouTubeDownloaderBPM/
 
 # Generar el ejecutable utilizando PyInstaller y Wine
 wine pyinstaller --onefile main.py
