@@ -6,7 +6,7 @@ cd $GITHUB_WORKSPACE/YouTubeDownloaderBPM
 # Verificar si pyinstaller está disponible
 if ! command -v pyinstaller &> /dev/null; then
     echo "pyinstaller no está instalado. Instalando pyinstaller..."
-    pip3 install pyinstaller
+    pip install pyinstaller
 fi
 
 # Verificar que el archivo main.py existe en la ubicación esperada
@@ -16,7 +16,7 @@ if [ ! -f main.py ]; then
 fi
 
 # Generar el ejecutable utilizando PyInstaller
-pyinstaller --onefile main.py
+pyinstaller --onefile -w main.py
 
 # Verificar si se generó correctamente main.exe
 if [ ! -f dist/main ]; then
