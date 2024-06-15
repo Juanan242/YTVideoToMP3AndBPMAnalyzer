@@ -13,18 +13,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install wine and dependencies
-      run: |
-        sudo dpkg --add-architecture i386
-        sudo apt-get update
-        sudo apt-get install -y wine64 wine32
-
     - name: Execute build.sh script
       run: |
-        ~/Escritorio/YouTubeDownloaderBPM/build.sh
+        Escritorio/YouTubeDownloaderBPM/build.sh
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v2
       with:
         name: main_exe
-        path: ~/Escritorio/YouTubeDownloaderBPM-Binaries/main.exe
+        path: Escritorio/YouTubeDownloaderBPM-Binaries/main.exe
