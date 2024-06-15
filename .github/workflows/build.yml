@@ -20,13 +20,13 @@ jobs:
         pip3 install pyinstaller
 
     - name: Ensure build.sh has execute permissions
-      run: chmod +x build.sh
+      run: chmod +x YouTubeDownloaderBPM/build.sh
 
     - name: Execute build.sh script
-      run: ./build.sh 
+      run: YouTubeDownloaderBPM/build.sh 
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v2
       with:
         name: main_exe
-        path: $GITHUB_WORKSPACE/Escritorio/YouTubeDownloaderBPM-Binaries/main.exe
+        path: $GITHUB_WORKSPACE/YouTubeDownloaderBPM-Binaries/main.exe
