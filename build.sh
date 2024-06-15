@@ -20,7 +20,7 @@ if ! command -v wine &> /dev/null; then
 fi
 
 # Configurar wine para usar una implementación sin interfaz gráfica
-export DISPLAY=:0.0
+export DISPLAY=:0
 
 # Generar el ejecutable utilizando PyInstaller y Wine
 wine pyinstaller --onefile Escritorio/YouTubeDownloaderBPM/main.py
