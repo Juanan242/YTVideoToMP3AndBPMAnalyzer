@@ -29,12 +29,24 @@ jobs:
     - name: Run build script
       run: ./build.sh
 
-    - name: Commit and push changes
+    - name: Clone Binaries Repository
       env:
-        GITHUB_TOKEN: ${{ secrets.PAT }}
+        PAT: ${{ secrets.PAT }}
+      run: |
+        git clone https://$PAT@github.com/Juanan242/YouTubeDownloaderBPM-Binaries-Linux.git binaries-repo
+        rm -rf binaries-repo/*  # Optional: clean the binaries repo before copying new files
+
+    - name: Move generated files to binaries repository
+      run: |
+        mv dist/* binaries-repo/
+
+    - name: Commit and push changes to binaries repository
+      working-directory: binaries-repo
+      env:
+        PAT: ${{ secrets.PAT }}
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git add .
-        git commit -m "Add generated files"
+        git commit -m "Add generated binaries"
         git push
