@@ -5,8 +5,18 @@ cd $GITHUB_WORKSPACE
 
 # Verificar si wine está disponible
 if ! command -v wine &> /dev/null; then
-    echo "Error: wine no está instalado o no configurado correctamente."
-    exit 1
+    echo "wine no está instalado. Instalando wine..."
+    # Instalar wine si no está disponible
+    if [ "$(uname -m)" = "x86_64" ]; then
+        sudo dpkg --add-architecture i386
+    fi
+    sudo apt update
+    sudo apt install -y wine64 wine32
+    # Verificar si la instalación fue exitosa
+    if ! command -v wine &> /dev/null; then
+        echo "Error: No se pudo instalar wine correctamente."
+        exit 1
+    fi
 fi
 
 # Generar el ejecutable utilizando PyInstaller y Wine
