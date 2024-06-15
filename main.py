@@ -17,6 +17,7 @@ def calcular_bpm(ruta_archivo):
             y, sr = librosa.load(ruta_archivo)
             tempo, _ = librosa.beat.beat_track(y=y, sr=sr)
             resultado.set(f"El BPM de la canción es: {tempo}")
+            resultado_label.config(fg='#19EB55')
         except Exception as e:
             messagebox.showerror("Error", f"Ocurrió un error al calcular el BPM:\n{str(e)}")
         finally:
@@ -125,10 +126,10 @@ y = (screen_height // 2) - (window_height // 2)
 
 # Establecer la geometría de la ventana
 root.geometry(f"{window_width}x{window_height}+{x}+{y}")
-root.configure(bg='#f0f0f0')
+root.configure(bg='#363a41')
 
 # Crear el marco principal
-frame = Frame(root, bg='#f0f0f0')
+frame = Frame(root, bg='#363a41')
 frame.pack(expand=True)
 
 # Variable para almacenar el resultado
@@ -136,30 +137,30 @@ resultado = StringVar()
 resultado.set("El BPM de la canción aparecerá aquí")
 
 # Crear y colocar los widgets para el menú principal
-menu_label = Label(frame, text="Selecciona una opción:", font=("Bold 2", 14), bg='#f0f0f0')
+menu_label = Label(frame, text="Selecciona una opción:", font=("Bold 2", 16), bg='#363a41', fg='#19EB55')
 menu_label.grid(row=0, column=0, pady=10)
-descargar_convertir_button = Button(frame, text="Descargar y Convertir a MP3 y Calcular BPM", command=mostrar_descargar_convertir, bg='#935125', fg='white', padx=10, pady=5, font=("Bold 2", 14))
+descargar_convertir_button = Button(frame, text="Descargar y Convertir a MP3 y Calcular BPM", command=mostrar_descargar_convertir, bg='#389eff', fg='black', padx=10, pady=5, font=("Bold 2", 14))
 descargar_convertir_button.grid(row=1, column=0, pady=10)
-seleccionar_archivo_button = Button(frame, text="Calcular BPM de un archivo MP3", command=mostrar_seleccionar_archivo, bg='#935125', fg='white', padx=10, pady=5, font=("Bold 2", 14))
+seleccionar_archivo_button = Button(frame, text="Calcular BPM de un archivo MP3", command=mostrar_seleccionar_archivo, bg='#389eff', fg='black', padx=10, pady=5, font=("Bold 2", 14))
 seleccionar_archivo_button.grid(row=2, column=0, pady=10)
 
 # Crear y colocar los widgets para la descarga y conversión
-url_label = Label(frame, text="Ingresa la URL del video:", font=("Bold 2", 14), bg='#f0f0f0')
+url_label = Label(frame, text="Ingresa la URL del video:", font=("Bold 2", 14), bg='#363a41', fg='#19EB55')
 url_entry = Entry(frame, width=60, font=("Helvetica", 12))
-descargar_button = Button(frame, text="Descargar y Convertir a MP3", command=descargar_y_convertir, bg='#935125', fg='white', padx=10, pady=5, font=("Bold 2", 14))
-volver_button = Button(frame, text="Volver al Menú", command=volver_al_menu, bg='#935125', fg='white', padx=10, pady=5, font=("Bold 2", 14))
+descargar_button = Button(frame, text="Descargar y Convertir a MP3", command=descargar_y_convertir, bg='#389eff', fg='black', padx=10, pady=5, font=("Bold 2", 14))
+volver_button = Button(frame, text="Volver al Menú", command=volver_al_menu, bg='#389eff', fg='black', padx=10, pady=5, font=("Bold 2", 14))
 
 # Crear y colocar los widgets para la selección de archivo
-seleccionar_button = Button(frame, text="Seleccionar archivo de audio", command=seleccionar_archivo, bg='#935125', fg='white', padx=10, pady=5, font=("Bold 2", 14))
+seleccionar_button = Button(frame, text="Seleccionar archivo de audio", command=seleccionar_archivo, bg='#389eff', fg='black', padx=10, pady=5, font=("Bold 2", 14))
 
 # Barra de progreso
 style = Style()
-style.configure("TProgressbar", thickness=10, troughcolor='#f0f0f0', background='#36647D')
+style.configure("TProgressbar", thickness=10, troughcolor='#363a41', background='#2F83B1')
 
 progress_bar = Progressbar(frame, style="TProgressbar", mode='indeterminate', length=300)
 
 # Resultado del BPM
-resultado_label = Label(frame, textvariable=resultado, bg='#f0f0f0', fg='#333', font=("Bold 2", 14))
+resultado_label = Label(frame, textvariable=resultado, bg='#363a41', fg='#19EB55', font=("Bold 2", 14))
 
 # Mostrar el menú principal al iniciar
 volver_al_menu()
