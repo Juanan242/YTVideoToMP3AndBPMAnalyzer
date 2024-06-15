@@ -13,6 +13,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Ensure build.sh has execute permissions
+      run: |
+        cd $GITHUB_WORKSPACE
+        chmod +x build.sh
+
     - name: Execute build.sh script
       run: |
         cd $GITHUB_WORKSPACE
