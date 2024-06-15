@@ -1,0 +1,29 @@
+name: Build Executable
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Run on a machine with Ubuntu
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2  # To get the repository's code
+
+    - name: Build executable
+      run: |
+        cd ~/Escritorio/YouTubeDownloaderBPM
+        wine pyinstaller --onefile main.py
+
+    - name: Move executable to binaries directory
+      run: mv dist/main.exe ~/Escritorio/YouTubeDownloaderBPM-Binaries/
+
+    - name: Upload executable as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: main_exe
+        path: ~/Escritorio/YouTubeDownloaderBPM-Binaries/main.exe
+
