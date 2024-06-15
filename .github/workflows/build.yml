@@ -13,13 +13,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Ensure build.sh has execute permissions
+    - name: Install Wine and dependencies
       run: |
-        chmod +x build.sh
+        sudo dpkg --add-architecture i386
+        sudo apt update
+        sudo apt install -y wine64 wine32 python3-pip
+        pip3 install pyinstaller
+
+    - name: Ensure build.sh has execute permissions
+      run: chmod +x build.sh
 
     - name: Execute build.sh script
-      run: |
-        ./build.sh 
+      run: ./build.sh 
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v2
