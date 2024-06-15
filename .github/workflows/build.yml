@@ -13,17 +13,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y python3-pip
-        pip3 install pyinstaller
-
     - name: Ensure build.sh has execute permissions
-      run: chmod +x build.sh
+      run: chmod +x YouTubeDownloaderBPM/build.sh
 
     - name: Execute build.sh script
-      run: ./build.sh 
+      run: YouTubeDownloaderBPM/build.sh 
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v2
