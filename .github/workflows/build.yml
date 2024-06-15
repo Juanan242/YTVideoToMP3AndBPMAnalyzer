@@ -20,7 +20,7 @@ jobs:
         pip3 install pyinstaller
 
     - name: Ensure build.sh has execute permissions
-      run: chmod +x YouTubeDownloaderBPM/build.sh
+      run: chmod +x build.sh
 
     - name: Execute build.sh script
       run: YouTubeDownloaderBPM/build.sh 
