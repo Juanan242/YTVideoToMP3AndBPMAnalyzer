@@ -15,12 +15,11 @@ jobs:
 
     - name: Ensure build.sh has execute permissions
       run: |
-        cd $GITHUB_WORKSPACE
+        cd ../../
         chmod +x build.sh
 
     - name: Execute build.sh script
       run: |
-        cd $GITHUB_WORKSPACE
         cd ./build.sh
 
     - name: Upload executable as artifact
