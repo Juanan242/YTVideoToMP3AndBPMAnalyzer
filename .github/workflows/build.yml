@@ -13,12 +13,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install wine and dependencies
-      run: |
-        sudo dpkg --add-architecture i386
-        sudo apt-get update
-        sudo apt-get install -y wine64 wine32
-
     - name: Ensure build.sh has execute permissions
       run: |
         cd $GITHUB_WORKSPACE
@@ -27,8 +21,6 @@ jobs:
     - name: Execute build.sh script
       run: |
         cd $GITHUB_WORKSPACE
-        wine pyinstaller --onefile Escritorio/YouTubeDownloaderBPM/main.py
-
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v2
