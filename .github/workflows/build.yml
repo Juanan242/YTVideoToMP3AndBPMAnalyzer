@@ -13,11 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install Wine and dependencies
+    - name: Install dependencies
       run: |
-        sudo dpkg --add-architecture i386
         sudo apt update
-        sudo apt install -y wine64 wine32 python3-pip
+        sudo apt install -y python3-pip
         pip3 install pyinstaller
 
     - name: Ensure build.sh has execute permissions
