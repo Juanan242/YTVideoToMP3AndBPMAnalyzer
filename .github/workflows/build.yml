@@ -1,4 +1,4 @@
-name: Build and Upload Executable
+name: Build Executable
 
 on:
   push:
@@ -10,8 +10,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Build and upload executable
-        run: Escritorio/YouTubeDownloaderBPM/build.sh
+    - name: Install wine and dependencies
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        sudo apt-get install -y wine64 wine32
+
+    - name: Build executable
+      run: |
+        cd $GITHUB_WORKSPACE
+        wine pyinstaller --onefile main.py
+
+    - name: Move executable to binaries directory
+      run: |
+        mkdir -p $GITHUB_WORKSPACE/Escritorio/YouTubeDownloaderBPM-Binaries
+        mv dist/main.exe $GITHUB_WORKSPACE/Escritorio/YouTubeDownloaderBPM-Binaries/
+
+    - name: Upload executable as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: main_exe
+        path: $GITHUB_WORKSPACE/Escritorio/YouTubeDownloaderBPM-Binaries/main.exe
