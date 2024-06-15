@@ -15,10 +15,11 @@ jobs:
 
     - name: Execute build.sh script
       run: |
-        Escritorio/YouTubeDownloaderBPM/
+        cd $GITHUB_WORKSPACE
+        ./build.sh
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v2
       with:
         name: main_exe
-        path: Escritorio/YouTubeDownloaderBPM-Binaries/main.exe
+        path: $GITHUB_WORKSPACE/Escritorio/YouTubeDownloaderBPM-Binaries/main.exe
