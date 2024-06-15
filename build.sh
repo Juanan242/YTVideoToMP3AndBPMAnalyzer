@@ -4,6 +4,6 @@ cd ~/Escritorio/YouTubeDownloaderBPM
 wine pyinstaller --onefile main.py
 
 # Mover el ejecutable generado al directorio de binarios
-mv dist/main.exe ~/Escritorio/YouTubeDownloaderBPM-Binaries/
+mv dist/main.exe Escritorio/YouTubeDownloaderBPM-Binaries/
 
-gh release upload v1 ~/Escritorio/YouTubeDownloaderBPM-Binaries/main.exe
+gh release upload v1 Escritorio/YouTubeDownloaderBPM-Binaries/main.exe

@@ -14,4 +14,4 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build and upload executable
-        run: $GITHUB_WORKSPACE/Escritorio/YouTubeDownloaderBPM/build.sh
+        run: Escritorio/YouTubeDownloaderBPM/build.sh
