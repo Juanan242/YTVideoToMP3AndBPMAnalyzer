@@ -7,23 +7,24 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Run on a machine with Ubuntu
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2  # To get the repository's code
+      uses: actions/checkout@v2
 
     - name: Build executable
       run: |
-        cd ~/Escritorio/YouTubeDownloaderBPM
+        cd $GITHUB_WORKSPACE
         wine pyinstaller --onefile main.py
 
     - name: Move executable to binaries directory
-      run: mv dist/main.exe ~/Escritorio/YouTubeDownloaderBPM-Binaries/
+      run: |
+        mkdir -p $GITHUB_WORKSPACE/Escritorio/YouTubeDownloaderBPM-Binaries
+        mv dist/main.exe $GITHUB_WORKSPACE/Escritorio/YouTubeDownloaderBPM-Binaries/
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v2
       with:
         name: main_exe
-        path: ~/Escritorio/YouTubeDownloaderBPM-Binaries/main.exe
-
+        path: $GITHUB_WORKSPACE/Escritorio/YouTubeDownloaderBPM-Binaries/main.exe
