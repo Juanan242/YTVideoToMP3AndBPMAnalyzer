@@ -15,7 +15,7 @@ jobs:
 
     - name: Execute build.sh script
       run: |
-        Escritorio/YouTubeDownloaderBPM/build.sh
+        Escritorio/YouTubeDownloaderBPM/
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v2
