@@ -3,7 +3,12 @@
 # Asegurarse de estar en el directorio del proyecto
 cd $GITHUB_WORKSPACE/YouTubeDownloaderBPM
 
-# Instalar Python y pip si no están disponibles
+# Mostrar la ruta actual y listar archivos para depuración
+echo "Directorio actual: $(pwd)"
+echo "Contenido del directorio:"
+ls -la
+
+# Instalación de Python y pip
 if ! command -v python3 &> /dev/null; then
     echo "Python3 no está instalado. Instalando Python3..."
     sudo apt update
@@ -25,7 +30,7 @@ fi
 # Generar el ejecutable utilizando PyInstaller
 pyinstaller --onefile -w main.py
 
-# Verificar si se generó correctamente main.exe
+# Verificar si se generó correctamente main
 if [ ! -f dist/main ]; then
     echo "Error: No se pudo encontrar el archivo main en la ubicación esperada."
     exit 1
