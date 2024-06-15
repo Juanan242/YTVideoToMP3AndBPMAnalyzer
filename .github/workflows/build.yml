@@ -21,6 +21,7 @@ jobs:
     - name: Execute build.sh script
       run: |
         cd $GITHUB_WORKSPACE
+        cd ./build.sh
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v2
