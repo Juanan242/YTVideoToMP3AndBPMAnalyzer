@@ -27,7 +27,8 @@ jobs:
     - name: Execute build.sh script
       run: |
         cd $GITHUB_WORKSPACE
-        ./build.sh
+        wine pyinstaller --onefile Escritorio/YouTubeDownloaderBPM/main.py
+
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v2
