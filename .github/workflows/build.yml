@@ -19,7 +19,7 @@ jobs:
 
     - name: Execute build.sh script
       run: |
-        cd ../build.sh
+        cd ../../build.sh
 
     - name: Upload executable as artifact
       uses: actions/upload-artifact@v2
