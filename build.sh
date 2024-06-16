@@ -33,9 +33,7 @@ mv dist/* "$DEST_DIR/dist/"
 mv build/* "$DEST_DIR/build/"
 mv *.spec "$DEST_DIR/spec/"
 
-echo "Archivos movidos a $DEST_DIR"
-
-# Eliminar los archivos generados en el directorio raíz
+# Eliminar los directorios y archivos generados en el directorio raíz del proyecto
 rm -rf dist
 rm -rf build
 rm -f *.spec
@@ -44,3 +42,43 @@ echo "Archivos movidos a $DEST_DIR y directorios eliminados del directorio raíz
 
 # Desactivar el entorno virtual
 deactivate
+
+# Cambiar al directorio de destino
+cd "$DEST_DIR"
+
+# Inicializar git si no está inicializado
+if [ ! -d .git ]; then
+    git init
+    echo "Repositorio Git inicializado en $DEST_DIR"
+fi
+
+# Configurar Git LFS y trackear archivos grandes si no se ha realizado previamente
+if [ ! -f .gitattributes ]; then
+    git lfs install
+    git lfs track "*.pkg"
+    git lfs track "dist/main"
+    git lfs track "main"
+    git add .gitattributes
+    echo "Git LFS configurado y archivos grandes trackeados"
+fi
+
+# Añadir los archivos al repositorio y hacer commit
+git add .
+git commit -m "Add large files with Git LFS"
+
+# Verificar si la rama main no existe y crearla
+if ! git show-ref --quiet refs/heads/main; then
+    git branch -M main
+    echo "Rama 'main' creada"
+fi
+
+# Añadir el repositorio remoto si no está configurado
+if ! git remote | grep -q origin; then
+    git remote add origin https://github.com/Juanan242/YouTubeDownloaderBPM-Binaries-Linux.git
+    echo "Repositorio remoto añadido"
+fi
+
+# Hacer push al repositorio remoto
+git push -u origin main
+
+echo "Cambios subidos al repositorio remoto"
