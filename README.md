@@ -7,7 +7,6 @@ Esta aplicación permite descargar videos de YouTube, convertirlos a MP3 y calcu
 - pytube
 - ffmpeg-python
 - librosa
-- tkinter
 
 ## Instalación
 
