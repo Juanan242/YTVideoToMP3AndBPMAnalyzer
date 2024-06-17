@@ -5,20 +5,24 @@ set -e
 
 # Definir las rutas de los directorios
 SOURCE_DIR="$HOME/Escritorio/YouTubeDownloaderBPM"
-DEST_DIR="$HOME/Escritorio/YouTubeDownloaderBPM-Binaries-prueba"
+DEST_DIR="$HOME/Escritorio/YouTubeDownloaderBPM-Binaries"
 VENV_DIR="$HOME/Escritorio/YouTubeDownloaderBPM/myenv"
 
 # Definir el nombre del archivo comprimido
-ARCHIVE_NAME="YouTubeDownloaderBPM-Binaries-prueba.rar"
+ARCHIVE_NAME="YouTubeDownloaderBPM-Binaries.rar"
 
-# Definir el token de GitHub y otros datos necesarios para la release
+# Definir el repositorio de GitHub y otros datos necesarios para la release
 GITHUB_REPO="Juanan242/YTVideoToMP3AndBPMAnalyzer"
-GITHUB_TOKEN="YOUR_GITHUB_TOKEN"
-RELEASE_NAME="New Release"
 RELEASE_TAG="v1.0.0"
 
+# Verificar que el token de GitHub esté definido
+if [ -z "$GITHUB_TOKEN" ]; then
+  echo "Error: GITHUB_TOKEN no está definido. Por favor, define el token de GitHub como una variable de entorno."
+  exit 1
+fi
+
 # Activar el entorno virtual
-source "$VENV_DIR/bin/activate"
+source "$VENV_DIR/Scripts/activate"
 
 # Verificar si pyinstaller está instalado, si no, instalarlo
 if ! command -v pyinstaller &> /dev/null
@@ -64,67 +68,31 @@ rar a "$DEST_DIR/$ARCHIVE_NAME" "$DEST_DIR"
 
 echo "Directorio $DEST_DIR comprimido en $ARCHIVE_NAME"
 
-# Cambiar al directorio de destino
-cd "$DEST_DIR"
+# Obtener la ID de la release existente
+release_id=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/repos/$GITHUB_REPO/releases/tags/$RELEASE_TAG \
+  | jq '.id')
 
-# Inicializar git si no está inicializado
-if [ ! -d .git ]; then
-    git init
-    echo "Repositorio Git inicializado en $DEST_DIR"
+# Obtener la ID del asset existente
+asset_id=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/repos/$GITHUB_REPO/releases/$release_id/assets \
+  | jq '.[] | select(.name=="'$ARCHIVE_NAME'") | .id')
+
+# Eliminar el asset existente si hay uno
+if [ ! -z "$asset_id" ]; then
+  curl -s -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
+    https://api.github.com/repos/$GITHUB_REPO/releases/assets/$asset_id
+  echo "Asset existente eliminado"
 fi
 
-# Configurar Git LFS y trackear archivos grandes si no se ha realizado previamente
-if [ ! -f .gitattributes ]; then
-    git lfs install
-    git lfs track "*.pkg"
-    git lfs track "dist/main"
-    git lfs track "main"
-    git add .gitattributes
-    echo "Git LFS configurado y archivos grandes trackeados"
-fi
-
-# Añadir los archivos al repositorio y hacer commit
-git add .
-git commit -m "Add large files with Git LFS"
-
-# Verificar si la rama main no existe y crearla
-if ! git show-ref --quiet refs/heads/main; then
-    git branch -M main
-    echo "Rama 'main' creada"
-fi
-
-# Añadir el repositorio remoto si no está configurado
-if ! git remote | grep -q origin; then
-    git remote add origin https://github.com/$GITHUB_REPO.git
-    echo "Repositorio remoto añadido"
-fi
-
-# Hacer push al repositorio remoto
-git push -u origin main
-
-echo "Cambios subidos"
-
-# Crear una nueva release en GitHub y subir el archivo .rar
-response=$(curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
-  -H "Accept: application/vnd.github.v3+json" \
-  https://api.github.com/repos/$GITHUB_REPO/releases \
-  -d @- << EOF
-{
-  "tag_name": "$RELEASE_TAG",
-  "target_commitish": "main",
-  "name": "$RELEASE_NAME",
-  "body": "Descripción de la release",
-  "draft": false,
-  "prerelease": false
-}
-EOF
-)
-
-upload_url=$(echo "$response" | grep -o '"upload_url": "[^"]*' | sed 's/"upload_url": "\(.*\){.*}/\1/')
+# Subir el nuevo archivo .rar
+upload_url=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/repos/$GITHUB_REPO/releases/$release_id \
+  | jq -r '.upload_url' | sed -e "s/{?name,label}//")
 
 curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
   -H "Content-Type: application/zip" \
   --data-binary @"$DEST_DIR/$ARCHIVE_NAME" \
   "$upload_url?name=$ARCHIVE_NAME"
 
-echo "Release creada y $ARCHIVE_NAME subido a GitHub"
+echo "Release actualizada y $ARCHIVE_NAME subido a GitHub"
