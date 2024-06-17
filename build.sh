@@ -3,10 +3,24 @@
 # Asegúrate de que el script se detenga si hay algún error
 set -e
 
-# Definir las rutas de los directorios
-SOURCE_DIR="$HOME/Escritorio/YouTubeDownloaderBPM"
-DEST_DIR="$HOME/Escritorio/YouTubeDownloaderBPM-Binaries"
-VENV_DIR="$HOME/Escritorio/YouTubeDownloaderBPM/myenv"
+# Detectar sistema operativo
+OS=$(uname)
+
+# Definir las rutas de los directorios basadas en el sistema operativo
+if [ "$OS" = "Linux" ]; then
+    # Ubuntu u otro sistema Linux donde se usa "Escritorio"
+    SOURCE_DIR="$HOME/Escritorio/YouTubeDownloaderBPM"
+    DEST_DIR="$HOME/Escritorio/YouTubeDownloaderBPM-Binaries"
+    VENV_DIR="$HOME/Escritorio/YouTubeDownloaderBPM/myenv"
+elif [ "$OS" = "MINGW64_NT-10.0" ]; then
+    # Windows donde se usa "Desktop"
+    SOURCE_DIR="$HOME/Desktop/YouTubeDownloaderBPM"
+    DEST_DIR="$HOME/Desktop/YouTubeDownloaderBPM-Binaries"
+    VENV_DIR="$HOME/Desktop/YouTubeDownloaderBPM/myenv"
+else
+    echo "Sistema operativo no soportado"
+    exit 1
+fi
 
 # Definir el nombre del archivo comprimido
 ARCHIVE_NAME="YouTubeDownloaderBPM-Binaries.rar"
