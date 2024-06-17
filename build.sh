@@ -8,6 +8,15 @@ SOURCE_DIR="$HOME/Escritorio/YouTubeDownloaderBPM"
 DEST_DIR="$HOME/Escritorio/YouTubeDownloaderBPM-Binaries-prueba"
 VENV_DIR="$HOME/Escritorio/YouTubeDownloaderBPM/myenv"
 
+# Definir el nombre del archivo comprimido
+ARCHIVE_NAME="YouTubeDownloaderBPM-Binaries-prueba.rar"
+
+# Definir el token de GitHub y otros datos necesarios para la release
+GITHUB_REPO="Juanan242/YTVideoToMP3AndBPMAnalyzer"
+GITHUB_TOKEN="YOUR_GITHUB_TOKEN"
+RELEASE_NAME="New Release"
+RELEASE_TAG="v1.0.0"
+
 # Activar el entorno virtual
 source "$VENV_DIR/bin/activate"
 
@@ -43,6 +52,18 @@ echo "Archivos movidos a $DEST_DIR y directorios eliminados del directorio raíz
 # Desactivar el entorno virtual
 deactivate
 
+# Comprimir el directorio en un archivo .rar
+if ! command -v rar &> /dev/null
+then
+    echo "RAR no está instalado. Instalándolo ahora..."
+    sudo apt-get update
+    sudo apt-get install rar
+fi
+
+rar a "$DEST_DIR/$ARCHIVE_NAME" "$DEST_DIR"
+
+echo "Directorio $DEST_DIR comprimido en $ARCHIVE_NAME"
+
 # Cambiar al directorio de destino
 cd "$DEST_DIR"
 
@@ -74,11 +95,36 @@ fi
 
 # Añadir el repositorio remoto si no está configurado
 if ! git remote | grep -q origin; then
-    git remote add origin https://github.com/Juanan242/YouTubeDownloaderBPM-Binaries-Linux.git
+    git remote add origin https://github.com/$GITHUB_REPO.git
     echo "Repositorio remoto añadido"
 fi
 
 # Hacer push al repositorio remoto
 git push -u origin main
 
-echo "Cambios subidos al repositorio remoto"
+echo "Cambios subidos"
+
+# Crear una nueva release en GitHub y subir el archivo .rar
+response=$(curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+  -H "Accept: application/vnd.github.v3+json" \
+  https://api.github.com/repos/$GITHUB_REPO/releases \
+  -d @- << EOF
+{
+  "tag_name": "$RELEASE_TAG",
+  "target_commitish": "main",
+  "name": "$RELEASE_NAME",
+  "body": "Descripción de la release",
+  "draft": false,
+  "prerelease": false
+}
+EOF
+)
+
+upload_url=$(echo "$response" | grep -o '"upload_url": "[^"]*' | sed 's/"upload_url": "\(.*\){.*}/\1/')
+
+curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" \
+  -H "Content-Type: application/zip" \
+  --data-binary @"$DEST_DIR/$ARCHIVE_NAME" \
+  "$upload_url?name=$ARCHIVE_NAME"
+
+echo "Release creada y $ARCHIVE_NAME subido a GitHub"
